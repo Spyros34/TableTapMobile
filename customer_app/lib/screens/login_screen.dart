@@ -11,13 +11,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
   bool obscurePassword = true;
 
   Future<void> _loginUser() async {
-    final String username = emailController.text.trim();
+    final String username = usernameController.text.trim();
     final String password = passwordController.text.trim();
 
     if (username.isEmpty || password.isEmpty) {
@@ -142,9 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     const SizedBox(height: 40),
                                     CustomTextField(
-                                      controller: emailController,
-                                      hintText: 'Email',
-                                      icon: Icons.email_outlined,
+                                      controller: usernameController,
+                                      hintText: 'Username',
+                                      icon: Icons.person_outline,
                                     ),
                                     const SizedBox(height: 20),
                                     CustomTextField(
