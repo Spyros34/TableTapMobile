@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'signup_screen.dart';
+import 'main_screen.dart'; // Import MainScreen
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final url = 'http://127.0.0.1:8000/customer/login';
     final headers = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json', // Ensure Laravel understands JSON responses
+      'Accept': 'application/json',
     };
 
     try {
@@ -60,9 +61,10 @@ class _LoginScreenState extends State<LoginScreen> {
           await prefs.setString('customer_name', customerData['name']);
           await prefs.setString('customer_username', customerData['username']);
 
-          // Navigate to the QR scan screen
-          Navigator.of(context)
-              .pushReplacementNamed('/qrscan', arguments: customerData);
+          // Navigate to MainScreen
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MainScreen()),
+          );
         } else {
           _showErrorDialog('Unexpected response format.');
         }
@@ -97,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Removes the debug banner
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.white,
         body: isLoading
@@ -111,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: IntrinsicHeight(
                         child: Column(
                           children: [
-                            const Spacer(), // Pushes content lower
+                            const Spacer(),
                             Center(
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -121,10 +123,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Welcome Back!',
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -201,7 +203,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            const Spacer(), // Adds more space below content
+                            const Spacer(),
                           ],
                         ),
                       ),

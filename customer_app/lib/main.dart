@@ -8,6 +8,7 @@ import 'screens/basket_screen.dart';
 import 'screens/shop_directory_screen.dart';
 import 'screens/profile_screen.dart';
 import 'services/auth_service.dart';
+import 'screens/main_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => LoginScreen(),
+          '/main': (context) => MainScreen(),
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignupScreen(),
           '/qrscan': (context) => QRScanScreen(),
