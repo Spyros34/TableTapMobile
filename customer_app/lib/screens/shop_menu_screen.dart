@@ -127,9 +127,23 @@ class _ShopMenuScreenState extends State<ShopMenuScreen> {
   }
 
   void _addToCart(int index) {
-    setState(() {
-      products[index]['count'] += 1;
-    });
+    // Prevent adding if the product is not available
+    if (products[index]['availability'] != 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('This product is not available.')),
+      );
+      return;
+    }
+
+    if (products[index]['count'] < products[index]['quantity']) {
+      setState(() {
+        products[index]['count'] += 1;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No more available quantity for this product.')),
+      );
+    }
   }
 
   void _removeFromCart(int index) {
@@ -141,7 +155,8 @@ class _ShopMenuScreenState extends State<ShopMenuScreen> {
   }
 
   Widget _buildProductCard(Map<String, dynamic> product, int index) {
-    final bool isAvailable = product['quantity'] > 0;
+    final bool isAvailable =
+        (product['availability'] == 1) && (product['quantity'] > 0);
     final int productCount = product['count'];
     final double price = double.tryParse(product['price'].toString()) ?? 0.0;
 
@@ -196,6 +211,16 @@ class _ShopMenuScreenState extends State<ShopMenuScreen> {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
+                  const SizedBox(height: 4.0),
+                  Text(
+                    isAvailable
+                        ? 'Available: ${product['quantity']}'
+                        : 'Not available',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: isAvailable ? Colors.grey.shade600 : Colors.red,
+                    ),
+                  ),
                   const SizedBox(height: 6.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -248,7 +273,15 @@ class _ShopMenuScreenState extends State<ShopMenuScreen> {
 
   void _showCartDialog() async {
     await _fetchCreditCards(); // Ensure credit cards are fetched before showing the dialog
-
+    // Check if any item has been added; if not, show a snackbar and return.
+    final cartItems =
+        products.where((product) => product['count'] > 0).toList();
+    if (cartItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('No items in cart.')),
+      );
+      return;
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
