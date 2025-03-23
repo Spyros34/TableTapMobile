@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:image_picker/image_picker.dart';
+import 'shop_menu_screen.dart';
 import 'package:qr_code_tools/qr_code_tools.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -91,6 +93,8 @@ class _QRScanScreenState extends State<QRScanScreen> {
             shopPhone: shopData['phone']
                 .toString(), // Convert to string if it's an integer
             tableNumber: tableData['table_num'],
+            shopId: shopId, // Pass shopId to navigate to the menu
+            tableId: tableId,
           );
         } else {
           setState(() {
@@ -150,12 +154,13 @@ class _QRScanScreenState extends State<QRScanScreen> {
     }
   }
 
-  void _showConfirmationDialog({
-    required String shopName,
-    required String shopLocation,
-    required String shopPhone,
-    required String tableNumber,
-  }) {
+  void _showConfirmationDialog(
+      {required String shopName,
+      required String shopLocation,
+      required String shopPhone,
+      required String tableNumber,
+      required String shopId,
+      required String tableId}) {
     showDialog(
       context: context,
       builder: (context) {
@@ -222,6 +227,14 @@ class _QRScanScreenState extends State<QRScanScreen> {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                // Navigate to the shop menu screen with the shopId
+                _createCustomerTableAssociation(tableId);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopMenuScreen(shopId: shopId),
+                  ),
+                );
               },
               child: Icon(
                 Icons.check,
@@ -239,6 +252,28 @@ class _QRScanScreenState extends State<QRScanScreen> {
         );
       },
     );
+  }
+
+  Future<void> _createCustomerTableAssociation(String tableId) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final customerId = prefs.getString('customer_id');
+
+      if (customerId == null) return;
+
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/associate-customer-table'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'customer_id': customerId,
+          'table_id': tableId,
+        }),
+      );
+
+      print('Association Response: ${response.body}');
+    } catch (e) {
+      print('Error associating customer and table: $e');
+    }
   }
 
   @override
