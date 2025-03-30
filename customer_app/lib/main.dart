@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/signup_screen.dart';
 import 'screens/qrscan_screen.dart';
-import 'screens/menu_screen.dart';
+// import 'screens/menu_screen.dart';
 import 'screens/basket_screen.dart';
 import 'screens/shop_directory_screen.dart';
 import 'screens/profile_screen.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => LoginScreen(),
           '/signup': (context) => SignupScreen(),
           '/qrscan': (context) => QRScanScreen(),
-          '/menu': (context) => MenuScreen(),
+          // '/menu': (context) => MenuScreen(),
           '/basket': (context) => BasketScreen(),
           '/shop_directory': (context) => ShopDirectoryScreen(),
           '/profile': (context) => ProfileScreen(),
