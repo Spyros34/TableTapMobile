@@ -117,6 +117,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  Future<void> _signOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(
+        'customer_id'); // or prefs.clear() if you want to remove all stored data
+    // Navigate to the login screen (ensure you have defined the route '/login' in your MaterialApp)
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
   Future<void> _changePassword() async {
     // Validate the password change form first
     if (!_passwordFormKey.currentState!.validate()) {
@@ -659,6 +667,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _signOut,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            Colors.red, // or another color to signify sign out
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24.0, vertical: 12.0),
+                      ),
+                      child: const Text('Sign Out',
+                          style: TextStyle(fontSize: 16)),
                     ),
                   ],
                 ),
