@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'signup_screen.dart';
 import 'main_screen.dart'; // Import MainScreen
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -185,7 +186,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                       ),
                                     ),
+
                                     const SizedBox(height: 20),
+                                    // Forgot Password Button
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForgotPasswordScreen()),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Forgot Password?',
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).push(
