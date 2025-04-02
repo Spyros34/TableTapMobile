@@ -50,10 +50,26 @@ class _ShopDirectoryScreenState extends State<ShopDirectoryScreen> {
       }
     } catch (e) {
       setState(() {
-        errorMessage = 'An error occurred: $e';
+        _showErrorDialog('System might be down, please try again later.');
         isLoading = false;
       });
     }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

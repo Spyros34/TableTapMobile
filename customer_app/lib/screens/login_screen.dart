@@ -77,7 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         isLoading = false;
       });
-      _showErrorDialog('Connection error: $e');
+      _showErrorDialog('System might be down, please try again later.');
     }
   }
 
